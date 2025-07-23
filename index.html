@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noskill App - Área de Membros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;500;700&family=Poppins:wght@400;600;700&display=swap');
+        
+        html, body {
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0a0a0a;
+        }
+
+        .font-teko {
+            font-family: 'Teko', sans-serif;
+        }
+
+        /* Animações */
+        .fade-in {
+            animation: fadeInAnimation 0.8s ease-in-out forwards;
+        }
+        .card-enter {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cardEnterAnimation 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeInAnimation {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes cardEnterAnimation {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilo para os Toggles Switches */
+        .toggle-checkbox:checked {
+            background-color: #EF4444; /* red-500 */
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #EF4444; /* red-500 */
+        }
+        
+        /* Estilo das Abas do Painel */
+        .tab-button.active {
+            background-color: #EF4444;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-200">
+
+    <div class="relative min-h-screen">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://i.imgur.com/iaMeAb7.jpeg" alt="Background Gamer" class="w-full h-full object-cover opacity-10">
+            <div class="absolute inset-0 bg-black/80"></div>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- TELA DE LOGIN -->
+        <!-- =================================================================== -->
+        <section id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+             <div class="relative z-10 w-full max-w-md bg-gray-900/50 border border-gray-800 rounded-2xl shadow-2xl shadow-red-500/10 p-8 fade-in">
+                <img src="https://i.imgur.com/OfdLSLU.png" alt="Logo Noskill.Sensi" class="mx-auto mb-6 w-32"/>
+                <h1 class="font-teko text-4xl text-center text-white uppercase tracking-wider mb-2">Área de Membros</h1>
+                <p class="text-center text-gray-400 mb-8">Acesse seu conteúdo exclusivo.</p>
+                <form id="login-form" class="space-y-6">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Seu E-mail</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fa-solid fa-envelope text-gray-500"></i></span>
+                            <input type="email" id="email" name="email" required class="w-full bg-gray-800/60 border border-gray-700 text-white rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition" placeholder="voce@email.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Sua Senha</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fa-solid fa-lock text-gray-500"></i></span>
+                            <input type="password" id="password" name="password" required class="w-full bg-gray-800/60 border border-gray-700 text-white rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition" placeholder="••••••••">
+                            <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-300">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="message-box" class="hidden p-3 rounded-lg text-center text-sm"></div>
+                    <div>
+                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-red-500/20 hover:shadow-red-500/40">
+                            ENTRAR
+                        </button>
+                    </div>
+                </form>
+                <div class="text-center mt-6">
+                    <a href="#" class="text-sm text-gray-400 hover:text-red-500 transition">Esqueceu sua senha?</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- TELA DO DASHBOARD (ESCONDIDA POR PADRÃO) -->
+        <!-- =================================================================== -->
+        <section id="dashboard-screen" class="hidden relative z-10 p-4 sm:p-6 lg:p-8">
+            <header class="flex justify-between items-center mb-10">
+                <img src="https://i.imgur.com/OfdLSLU.png" alt="Logo Noskill.Sensi" class="h-10 sm:h-12"/>
+                <div class="text-center hidden sm:block">
+                    <h1 class="font-teko text-2xl text-white uppercase">Bem-vindo, Jogador!</h1>
+                    <p class="text-sm text-gray-400">Seu arsenal está pronto.</p>
+                </div>
+                <a href="#" id="logout-button" class="flex items-center gap-2 bg-red-600/80 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span class="hidden sm:inline">Sair</span>
+                </a>
+            </header>
+
+            <main class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card-enter bg-gray-900/50 border border-gray-800 rounded-2xl p-6 flex flex-col items-center text-center hover:border-red-500/50 transition-colors duration-300" style="animation-delay: 0.1s;">
+                        <div class="text-5xl text-red-500 mb-4"><i class="fa-solid fa-gamepad"></i></div>
+                        <h2 class="font-teko text-3xl text-white uppercase mb-2">Painel de Funções</h2>
+                        <p class="text-gray-400 text-sm mb-6 flex-grow">Ative as funções principais como Aimbot, NoRecoil e o novo Otimizador IA.</p>
+                        <button id="open-panel-button" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105">
+                            ABRIR PAINEL
+                        </button>
+                    </div>
+                    <div class="card-enter bg-gray-900/50 border border-gray-800 rounded-2xl p-6 flex flex-col items-center text-center hover:border-red-500/50 transition-colors duration-300" style="animation-delay: 0.2s;">
+                        <div class="text-5xl text-red-500 mb-4"><i class="fa-solid fa-brain"></i></div>
+                        <h2 class="font-teko text-3xl text-white uppercase mb-2">IA Otimizadora</h2>
+                        <p class="text-gray-400 text-sm mb-6 flex-grow">Receba uma Sensi e DPI perfeitas para o seu celular, geradas por nossa IA.</p>
+                        <button data-tab="ia" class="open-panel-tab-button w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300">
+                            OTIMIZAR AGORA
+                        </button>
+                    </div>
+                    <div class="card-enter bg-gray-900/50 border border-gray-800 rounded-2xl p-6 flex flex-col items-center text-center hover:border-red-500/50 transition-colors duration-300" style="animation-delay: 0.3s;">
+                        <div class="text-5xl text-red-500 mb-4"><i class="fa-solid fa-star"></i></div>
+                        <h2 class="font-teko text-3xl text-white uppercase mb-2">Bônus: Sensi dos Famosos</h2>
+                        <p class="text-gray-400 text-sm mb-6 flex-grow">Copie a sensibilidade exata dos maiores pro-players e influenciadores do cenário.</p>
+                        <button class="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300">
+                            VER SENSIBILIDADES
+                        </button>
+                    </div>
+                    <div class="card-enter bg-gray-900/50 border border-gray-800 rounded-2xl p-6 flex flex-col items-center text-center hover:border-green-500/50 transition-colors duration-300" style="animation-delay: 0.4s;">
+                        <div class="text-5xl text-green-500 mb-4"><i class="fa-brands fa-whatsapp"></i></div>
+                        <h2 class="font-teko text-3xl text-white uppercase mb-2">Suporte Premium</h2>
+                        <p class="text-gray-400 text-sm mb-6 flex-grow">Precisa de ajuda para configurar ou tem alguma dúvida? Fale com nossa equipe diretamente.</p>
+                        <a href="#" target="_blank" class="w-full block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300">
+                            CHAMAR NO WHATSAPP
+                        </a>
+                    </div>
+                    <div class="card-enter bg-gray-900/50 border border-gray-800 rounded-2xl p-6 flex flex-col items-center text-center hover:border-red-500/50 transition-colors duration-300" style="animation-delay: 0.5s;">
+                        <div class="text-5xl text-red-500 mb-4"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                        <h2 class="font-teko text-3xl text-white uppercase mb-2">Bônus: Guia de HUDs</h2>
+                        <p class="text-gray-400 text-sm mb-6 flex-grow">Aprenda a configurar seu HUD para 2, 3 e 4 dedos e melhore sua movimentação.</p>
+                        <button class="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300">
+                            BAIXAR GUIA
+                        </button>
+                    </div>
+                    <div class="card-enter bg-gray-900/50 border border-gray-800 rounded-2xl p-6 flex flex-col items-center text-center hover:border-red-500/50 transition-colors duration-300" style="animation-delay: 0.6s;">
+                        <div class="text-5xl text-red-500 mb-4"><i class="fa-solid fa-bullseye"></i></div>
+                        <h2 class="font-teko text-3xl text-white uppercase mb-2">Bônus: Miras Personalizadas</h2>
+                        <p class="text-gray-400 text-sm mb-6 flex-grow">Pacote de miras exclusivas para usar sobre o jogo e facilitar a precisão.</p>
+                        <button class="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300">
+                            VER MIRAS
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </section>
+    </div>
+
+    <!-- PAINEL FLUTUANTE (ESCONDIDO POR PADRÃO) -->
+    <div id="floating-panel" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 bg-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-xl shadow-2xl shadow-black/50 z-50">
+        <div id="panel-header" class="flex items-center justify-between p-3 bg-gray-900/50 rounded-t-xl cursor-move">
+            <div class="flex items-center gap-2">
+                <img src="https://i.imgur.com/OfdLSLU.png" alt="Logo" class="h-6">
+                <h3 class="font-teko text-xl text-white uppercase">Painel de Controle</h3>
+            </div>
+            <button id="close-panel-button" class="text-gray-500 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark fa-lg"></i>
+            </button>
+        </div>
+        
+        <!-- Abas de Navegação do Painel -->
+        <div class="flex border-b border-gray-700">
+            <button data-tab="functions" class="tab-button flex-1 p-3 text-sm font-semibold text-gray-400 hover:bg-gray-800 transition-colors active">Funções Principais</button>
+            <button data-tab="ia" class="tab-button flex-1 p-3 text-sm font-semibold text-gray-400 hover:bg-gray-800 transition-colors">IA Otimizadora</button>
+        </div>
+
+        <!-- Conteúdo das Abas -->
+        <div class="p-4">
+            <!-- Aba 1: Funções -->
+            <div id="tab-content-functions" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <label for="aimbot-toggle" class="text-gray-300">Mira que Gruda (90%)</label>
+                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="aimbot-toggle" id="aimbot-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                        <label for="aimbot-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <label for="hs-toggle" class="text-gray-300">Taxa de HS (+200%)</label>
+                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="hs-toggle" id="hs-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                        <label for="hs-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <label for="recoil-toggle" class="text-gray-300">Tiros 100% Retos</label>
+                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="recoil-toggle" id="recoil-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                        <label for="recoil-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <label for="fps-toggle" class="text-gray-300">Aumento de FPS (+120)</label>
+                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="fps-toggle" id="fps-toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                        <label for="fps-toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-700 cursor-pointer"></label>
+                    </div>
+                </div>
+            </div>
+            <!-- Aba 2: IA -->
+            <div id="tab-content-ia" class="hidden space-y-4">
+                <div>
+                    <label for="phone-model" class="block text-sm font-medium text-gray-300 mb-2">1. Digite o modelo do seu celular:</label>
+                    <input type="text" id="phone-model" class="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Ex: iPhone 8, Samsung A30">
+                </div>
+                <div>
+                    <label for="game-mode" class="block text-sm font-medium text-gray-300 mb-2">2. Qual seu estilo de jogo?</label>
+                    <select id="game-mode" class="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <option value="">Selecione um modo...</option>
+                        <option value="rush">X1 / Apostado (Rushadão)</option>
+                        <option value="control">Rankeada / 4x4 (Controle)</option>
+                    </select>
+                </div>
+                <button id="generate-config-button" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-lg transition-all duration-300">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Gerar Configuração
+                </button>
+                <div id="ai-result" class="hidden mt-4 p-3 bg-gray-800/50 border border-gray-700 rounded-lg text-sm space-y-2">
+                    <!-- O resultado da IA aparecerá aqui -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos da UI
+            const loginScreen = document.getElementById('login-screen');
+            const dashboardScreen = document.getElementById('dashboard-screen');
+            const loginForm = document.getElementById('login-form');
+            const logoutButton = document.getElementById('logout-button');
+            const messageBox = document.getElementById('message-box');
+            const passwordInput = document.getElementById('password');
+            const togglePassword = document.getElementById('toggle-password');
+            
+            // Credenciais de teste
+            const TEST_USER = 'cliente@email.com';
+            const TEST_PASS = '123456';
+
+            // Lógica de Login
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                if (email === "" || password === "") {
+                    showMessage('Por favor, preencha todos os campos.', 'error');
+                    return;
+                }
+
+                showMessage('Verificando credenciais...', 'loading');
+
+                setTimeout(() => {
+                    if (email === TEST_USER && password === TEST_PASS) {
+                        showMessage('Login bem-sucedido! Acessando...', 'success');
+                        setTimeout(() => {
+                            loginScreen.classList.add('hidden');
+                            dashboardScreen.classList.remove('hidden');
+                        }, 1000);
+                    } else {
+                        showMessage('E-mail ou senha incorretos.', 'error');
+                    }
+                }, 1500);
+            });
+
+            // Lógica do Logout
+            logoutButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                dashboardScreen.classList.add('hidden');
+                loginScreen.classList.remove('hidden');
+                loginForm.reset();
+            });
+
+            // Lógica para mostrar/esconder a senha
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('fa-eye');
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+            
+            function showMessage(text, type) {
+                messageBox.textContent = text;
+                messageBox.classList.remove('hidden');
+                if (type === 'error') {
+                    messageBox.className = 'p-3 rounded-lg text-center text-sm bg-red-500/20 text-red-300';
+                } else if (type === 'success') {
+                    messageBox.className = 'p-3 rounded-lg text-center text-sm bg-green-500/20 text-green-300';
+                } else {
+                    messageBox.className = 'p-3 rounded-lg text-center text-sm bg-gray-700/20 text-gray-300';
+                }
+            }
+
+            // ===================================================================
+            // LÓGICA DO PAINEL FLUTUANTE
+            // ===================================================================
+            const panel = document.getElementById('floating-panel');
+            const openButton = document.getElementById('open-panel-button');
+            const closeButton = document.getElementById('close-panel-button');
+            const panelHeader = document.getElementById('panel-header');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const openPanelTabButtons = document.querySelectorAll('.open-panel-tab-button');
+
+            // Abrir e Fechar o Painel
+            const openPanel = (tabName = 'functions') => {
+                panel.classList.remove('hidden');
+                switchTab(tabName);
+            };
+            openButton.addEventListener('click', () => openPanel());
+            openPanelTabButtons.forEach(btn => {
+                btn.addEventListener('click', () => openPanel(btn.dataset.tab));
+            });
+            closeButton.addEventListener('click', () => panel.classList.add('hidden'));
+
+            // Lógica das Abas
+            const switchTab = (tabName) => {
+                document.querySelectorAll('[id^="tab-content-"]').forEach(content => content.classList.add('hidden'));
+                document.getElementById(`tab-content-${tabName}`).classList.remove('hidden');
+                
+                tabButtons.forEach(button => {
+                    button.classList.toggle('active', button.dataset.tab === tabName);
+                });
+            };
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => switchTab(button.dataset.tab));
+            });
+
+            // Lógica da IA Otimizadora
+            const generateConfigButton = document.getElementById('generate-config-button');
+            const phoneModelInput = document.getElementById('phone-model');
+            const gameModeSelect = document.getElementById('game-mode');
+            const aiResultDiv = document.getElementById('ai-result');
+
+            generateConfigButton.addEventListener('click', () => {
+                const model = phoneModelInput.value.trim();
+                const mode = gameModeSelect.value;
+
+                if (model === "" || mode === "") {
+                    aiResultDiv.innerHTML = `<p class="text-red-400">Por favor, preencha todos os campos.</p>`;
+                    aiResultDiv.classList.remove('hidden');
+                    return;
+                }
+
+                aiResultDiv.innerHTML = `<p class="text-yellow-400">Analisando ${model} e gerando a sensi perfeita para ${mode === 'rush' ? 'X1/Apostado' : 'Rankeada'}...</p>`;
+                aiResultDiv.classList.remove('hidden');
+
+                setTimeout(() => {
+                    // Simulação de IA gerando valores diferentes com base no modo
+                    const dpi = Math.floor(Math.random() * (960 - 540 + 1)) + 540;
+                    const awm = Math.floor(Math.random() * (60 - 40 + 1)) + 40;
+                    
+                    let geral, redDot, mira2x, mira4x;
+
+                    if (mode === 'rush') { // Sensi mais alta para rush
+                        geral = Math.floor(Math.random() * (200 - 190 + 1)) + 190;
+                        redDot = Math.floor(Math.random() * (200 - 195 + 1)) + 195;
+                        mira2x = Math.floor(Math.random() * (200 - 198 + 1)) + 198;
+                        mira4x = Math.floor(Math.random() * (200 - 198 + 1)) + 198;
+                    } else { // Sensi mais controlada para rankeada
+                        geral = Math.floor(Math.random() * (190 - 180 + 1)) + 180;
+                        redDot = Math.floor(Math.random() * (195 - 185 + 1)) + 185;
+                        mira2x = Math.floor(Math.random() * (198 - 190 + 1)) + 190;
+                        mira4x = Math.floor(Math.random() * (198 - 190 + 1)) + 190;
+                    }
+
+                    aiResultDiv.innerHTML = `
+                        <p class="font-bold text-white">Configuração Otimizada para ${mode === 'rush' ? 'X1/Apostado' : 'Rankeada'} no ${model}:</p>
+                        <p><strong class="text-red-400">DPI:</strong> ${dpi}</p>
+                        <p><strong class="text-red-400">Geral:</strong> ${geral}</p>
+                        <p><strong class="text-red-400">Red Dot:</strong> ${redDot}</p>
+                        <p><strong class="text-red-400">Mira 2x:</strong> ${mira2x}</p>
+                        <p><strong class="text-red-400">Mira 4x:</strong> ${mira4x}</p>
+                        <p><strong class="text-red-400">AWM:</strong> ${awm}</p>
+                        <p class="text-xs text-gray-500 mt-2">Lembre-se: esta é uma base. Ajuste fino no modo treino para encontrar a sua sensi perfeita!</p>
+                    `;
+                }, 2000);
+            });
+
+            // Lógica para Arrastar o Painel
+            let isDragging = false, offsetX, offsetY;
+            const startDrag = (e) => {
+                isDragging = true;
+                const clientX = e.clientX || e.touches[0].clientX;
+                const clientY = e.clientY || e.touches[0].clientY;
+                offsetX = clientX - panel.offsetLeft;
+                offsetY = clientY - panel.offsetTop;
+                panelHeader.classList.add('cursor-grabbing');
+            };
+            const doDrag = (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const clientX = e.clientX || e.touches[0].clientX;
+                const clientY = e.clientY || e.touches[0].clientY;
+                let newX = clientX - offsetX;
+                let newY = clientY - offsetY;
+                const maxX = window.innerWidth - panel.offsetWidth;
+                const maxY = window.innerHeight - panel.offsetHeight;
+                newX = Math.max(0, Math.min(newX, maxX));
+                newY = Math.max(0, Math.min(newY, maxY));
+                panel.style.left = `${newX}px`;
+                panel.style.top = `${newY}px`;
+                panel.style.transform = ''; 
+            };
+            const stopDrag = () => {
+                isDragging = false;
+                panelHeader.classList.remove('cursor-grabbing');
+            };
+
+            panelHeader.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', doDrag);
+            document.addEventListener('mouseup', stopDrag);
+            panelHeader.addEventListener('touchstart', startDrag, { passive: false });
+            document.addEventListener('touchmove', doDrag, { passive: false });
+            document.addEventListener('touchend', stopDrag);
+        });
+    </script>
+</body>
+</html>
